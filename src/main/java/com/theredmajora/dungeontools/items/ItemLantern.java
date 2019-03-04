@@ -1,93 +1,81 @@
 package com.theredmajora.dungeontools.items;
 
-import javax.annotation.Nullable;
+import java.util.List;
 
-import com.theredmajora.dungeontools.DungeonConfig;
-import com.theredmajora.dungeontools.blocks.BlockHardWeb;
-import com.theredmajora.dungeontools.blocks.BlockUnlitTorch;
-import com.theredmajora.dungeontools.blocks.BlockVanish;
+import com.theredmajora.dungeontools.DungeonItems;
+import com.theredmajora.dungeontools.DungeonTools;
 
-import net.minecraft.block.BlockTorch;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemLantern extends ItemDungeon
-{	
+{
+	private IIcon emptyIcon;
+	private IIcon filledIcon;
+	
     public ItemLantern()
     {
     	super("lantern");
         this.maxStackSize = 1;
-        this.setMaxDamage(DungeonConfig.lanternDamage + 1);
-
-        this.addPropertyOverride(new ResourceLocation("broken"), new IItemPropertyGetter()
-        {
-            @SideOnly(Side.CLIENT)
-            public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn)
-            {
-                return stack.getItemDamage() == stack.getMaxDamage() - 1 ? 1.0F : 0.0F;
-            }
-        });
+        this.setMaxDamage(40);
     }
     
-	@Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float x, float y, float z)
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int meta, float dx, float dy, float dz)
     {
-    	ItemStack stack = player.getHeldItem(hand);
+    	if(stack.getItemDamage() == 39) return false;
     	
-    	if(stack.getItemDamage() != stack.getMaxDamage() - 1)
+    	if(world.getBlock(x, y, z) == DungeonItems.unlit_torch)
     	{
-    		if(world.getBlockState(pos).getBlock()  instanceof BlockUnlitTorch)
-        	{
-				world.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
-            	world.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, world.getBlockState(pos).getValue(BlockUnlitTorch.FACING)));
-                stack.setItemDamage(stack.getItemDamage() + 1);
-                return EnumActionResult.SUCCESS;
-        	}
-        	else if(world.getBlockState(pos).getBlock() instanceof BlockHardWeb && world.getBlockState(pos).getValue(BlockVanish.VANISH).equals(false))
-        	{
-				world.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
-        		world.setBlockState(pos, ((BlockVanish) world.getBlockState(pos).getBlock()).getVanishedState(world.getBlockState(pos)));
-                stack.setItemDamage(Math.min(stack.getMaxDamage() - 1, stack.getItemDamage() + 3));
-                return EnumActionResult.SUCCESS;
-        	}
-
-            return EnumActionResult.PASS;
+        	world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "fire.ignite", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
+        	world.setBlock(x, y, z, Blocks.torch, world.getBlockMetadata(x, y, z), 3);
+            stack.setItemDamage(stack.getItemDamage() + 1);
+    		return true;
+    	}
+    	else if(world.getBlock(x, y, z) == DungeonItems.hard_web && world.getBlockMetadata(x, y, z) == 0)
+    	{
+        	world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "fire.ignite", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
+    		world.setBlockMetadataWithNotify(x, y, z, 1, 3);
+            stack.setItemDamage(Math.min(39, stack.getItemDamage() + 3));
+            return true;
     	}
 
-
-		world.playSound(player, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
-        return EnumActionResult.PASS;
+        if(stack.getItemDamage() == 39) world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "random.fizz", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
+        return false;
     }
+    
 
 	@Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
-    {
-        if (this.isInCreativeTab(tab))
-        {
-            items.add(new ItemStack(this, 1));
-            items.add(new ItemStack(this, 1, this.getMaxDamage(new ItemStack(this)) - 1));
-        }
-    }
+	public void registerIcons(IIconRegister reg)
+	{
+        this.emptyIcon = reg.registerIcon(DungeonTools.ModID + ":lantern_empty");
+        this.filledIcon = reg.registerIcon(DungeonTools.ModID + ":lantern_filled");
+	}
+	
+	@Override
+	public IIcon getIconFromDamage(int meta)
+	{
+		if(meta == 39) return emptyIcon;
+		return filledIcon;
+	}
+
+	@Override
+	public void getSubItems(Item item, CreativeTabs tab, List list)
+	{
+		list.add(new ItemStack(item, 1));
+		list.add(new ItemStack(item, 1, 39));
+	}
 
     @Override
     public String getUnlocalizedName(ItemStack stack) 
     {
-		if(stack.getItemDamage() == stack.getMaxDamage() - 1) return this.getUnlocalizedName() + "_empty";
+
+		if(stack.getItemDamage() == 39) return this.getUnlocalizedName() + "_empty";
 		return this.getUnlocalizedName() + "_filled";
     }
 }

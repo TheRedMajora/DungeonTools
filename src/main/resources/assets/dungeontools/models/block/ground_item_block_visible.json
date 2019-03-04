@@ -1,8 +1,0 @@
-{
-    "parent": "block/half_slab",
-    "textures": {
-        "top": "dungeontools:blocks/ground_item_block",
-        "side": "dungeontools:blocks/ground_item_block",
-        "bottom": "dungeontools:blocks/ground_item_block"
-    }
-}

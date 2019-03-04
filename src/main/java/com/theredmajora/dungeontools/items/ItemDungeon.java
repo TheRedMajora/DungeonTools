@@ -3,8 +3,6 @@ package com.theredmajora.dungeontools.items;
 import com.theredmajora.dungeontools.DungeonTools;
 
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemDungeon extends Item
 {
@@ -12,11 +10,7 @@ public class ItemDungeon extends Item
 	{
 		super();
 		this.setUnlocalizedName(name);
-		this.setRegistryName(name);
-		this.setCreativeTab(DungeonTools.dungeonTab);
+		this.setTextureName(DungeonTools.ModID + ":" + name);
+		this.setCreativeTab(DungeonTools.bwelluTab);
 	}
-
-    @SideOnly(Side.CLIENT)
-	public void registerItemModel()
-	{ DungeonTools.proxy.registerItemRenderer(this, 0); }
 }

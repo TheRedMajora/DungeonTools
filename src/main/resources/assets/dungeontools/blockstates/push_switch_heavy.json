@@ -1,8 +1,0 @@
-{
-	"forge_marker": 1,
-	"variants": {
-		"activated=false": {  "model": "cube_all", "textures": { "all": "dungeontools:blocks/push_switch_heavy" } },
-		"activated=true": {  "model": "cube_all", "textures": { "all": "dungeontools:blocks/push_switch_heavy_activated" }  },
-		"inventory":  {  "model": "cube_all", "textures": { "all": "dungeontools:blocks/push_switch_heavy" } }
-	}
-}

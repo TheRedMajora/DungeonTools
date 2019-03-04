@@ -1,6 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "dungeontools:items/door_locked_red"
-  }
-}

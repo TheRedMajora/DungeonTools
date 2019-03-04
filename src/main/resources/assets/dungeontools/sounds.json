@@ -2,16 +2,16 @@
     "unlock.door":
     {
         "category": "player",
-        "sounds": [  "dungeontools:unlock" ]
+        "sounds": [  "unlock" ]
     },
 	"success":
     {
         "category": "player",
-        "sounds": [  "dungeontools:success" ]
+        "sounds": [  "success" ]
     },
 	"unlock.fail":
     {
         "category": "player",
-        "sounds": [  "dungeontools:lockfail" ]
+        "sounds": [  "lockfail" ]
     }
 }
