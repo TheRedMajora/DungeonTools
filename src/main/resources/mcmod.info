@@ -1,0 +1,16 @@
+[
+{
+  "modid": "dungeontools",
+  "name": "Dungeon Tools",
+  "description": "A mod that adds various blocks and items to help build dungeons in Adventure Maps.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["TheRedMajora"],
+  "credits": "",
+  "logoFile": "assets/dungeontools/textures/logo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]

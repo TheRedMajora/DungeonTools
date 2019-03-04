@@ -1,0 +1,8 @@
+{
+	"forge_marker": 1,
+	"variants": {
+		"vanish=false": {  "model": "cube_all", "textures": { "all": "dungeontools:blocks/vanish_lock_purple" } },
+		"vanish=true": {  "model": "cube_all", "textures": { "all": "dungeontools:blocks/vanished_block" }  },
+		"inventory":  {  "model": "cube_all", "textures": { "all": "dungeontools:blocks/vanish_lock_purple" } }
+	}
+}

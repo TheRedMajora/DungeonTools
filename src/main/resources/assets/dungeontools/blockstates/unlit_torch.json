@@ -1,0 +1,16 @@
+{
+	"forge_marker": 1,
+	"variants": {
+        "facing=up": { "model": "dungeontools:unlit_torch" },
+        "facing=east": { "model": "dungeontools:unlit_torch_wall" },
+        "facing=south": { "model": "dungeontools:unlit_torch_wall", "y": 90 },
+        "facing=west": { "model": "dungeontools:unlit_torch_wall", "y": 180 },
+        "facing=north": { "model": "dungeontools:unlit_torch_wall", "y": 270 },
+		"normal": {
+			"model": "dungeontools:unlit_torch"
+		},
+		"inventory": {
+			"model": "dungeontools:unlit_torch"
+		}
+	}
+}
