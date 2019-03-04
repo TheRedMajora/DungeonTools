@@ -2,7 +2,7 @@
 name: Bug/crash report
 about: Create a report to help the mod improve
 title: 'BUG: '
-labels: bug
+labels: bug / crash
 assignees: TheRedMajora
 
 ---
