@@ -9,7 +9,6 @@ import com.theredmajora.dungeontools.extra.EntityFallingPushBlock;
 import com.theredmajora.dungeontools.tileentity.TileEntityPushBlock;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +23,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockPush extends Block implements ITileEntityProvider
+public class BlockPush extends Block
 {
 	boolean heavy;
     
@@ -222,7 +221,11 @@ public class BlockPush extends Block implements ITileEntityProvider
     }
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new TileEntityPushBlock();
 	}
+	
+	@Override
+    public boolean hasTileEntity(IBlockState state)
+    { return true; }
 }

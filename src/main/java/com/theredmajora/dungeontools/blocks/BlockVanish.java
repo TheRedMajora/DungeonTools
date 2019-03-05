@@ -6,7 +6,6 @@ import com.theredmajora.dungeontools.DungeonTools;
 import com.theredmajora.dungeontools.tileentity.TileEntityVanish;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -21,7 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockVanish extends Block implements ITileEntityProvider
+public class BlockVanish extends Block
 {
     public static final AxisAlignedBB VANISHED_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
     public static final PropertyBool VANISH = PropertyBool.create("vanish");
@@ -37,9 +36,13 @@ public class BlockVanish extends Block implements ITileEntityProvider
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new TileEntityVanish();
 	}
+	
+	@Override
+    public boolean hasTileEntity(IBlockState state)
+    { return true; }
     
     public void vanish(World world, BlockPos pos)
     {
