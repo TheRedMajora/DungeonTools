@@ -1,0 +1,28 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "dungeontools:items/gauntlet"
+  },
+  "display": {
+    "thirdperson_righthand": {
+        "rotation": [ 90, 0, -134 ],
+        "translation": [ 0.00, -1.95, -1.00 ],
+        "scale": [ 0.65, 0.65, 4 ]
+    },
+    "thirdperson_lefthand": {
+        "rotation": [ 90, 180, 136 ],
+        "translation": [ 0.00, -1.95, -1.00 ],
+        "scale": [ 0.65, 0.65, 4 ]
+    },
+    "firstperson_righthand": {
+        "rotation": [ 0, 90, 0 ],
+        "translation": [ 0.38, 4.95, -0.37 ],
+        "scale": [ 0.68, 0.68, 0.68 ]
+    },
+    "firstperson_lefthand": {
+        "rotation": [ 0, -90, 0 ],
+        "translation": [ 0.38, 4.95, -0.37 ],
+        "scale": [ 0.68, 0.68, 0.68 ]
+    }
+	}
+}

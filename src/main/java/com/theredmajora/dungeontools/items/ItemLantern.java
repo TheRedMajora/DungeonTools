@@ -3,6 +3,7 @@ package com.theredmajora.dungeontools.items;
 import javax.annotation.Nullable;
 
 import com.theredmajora.dungeontools.DungeonConfig;
+import com.theredmajora.dungeontools.DungeonTools;
 import com.theredmajora.dungeontools.blocks.BlockHardWeb;
 import com.theredmajora.dungeontools.blocks.BlockUnlitTorch;
 import com.theredmajora.dungeontools.blocks.BlockVanish;
@@ -14,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -26,12 +28,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemLantern extends ItemDungeon
+public class ItemLantern extends Item
 {	
     public ItemLantern()
     {
-    	super("lantern");
+    	super();
         this.maxStackSize = 1;
+		this.setUnlocalizedName("lantern");
+		this.setRegistryName("lantern");
+		this.setCreativeTab(DungeonTools.dungeonTab);
         this.setMaxDamage(DungeonConfig.lanternDamage + 1);
 
         this.addPropertyOverride(new ResourceLocation("broken"), new IItemPropertyGetter()

@@ -1,11 +1,13 @@
 package com.theredmajora.dungeontools.items;
 import com.theredmajora.dungeontools.DungeonConfig;
 import com.theredmajora.dungeontools.DungeonSounds;
+import com.theredmajora.dungeontools.DungeonTools;
 import com.theredmajora.dungeontools.extra.IColorType;
 import com.theredmajora.dungeontools.extra.IUnlockable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -14,14 +16,17 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemKey extends ItemDungeon
+public class ItemKey extends Item
 {
 	String type;
 	boolean skeleton;
 	
 	public ItemKey(String type)
 	{
-		super("key_" + type);
+		super();
+		this.setUnlocalizedName("key_" + type);
+		this.setRegistryName("key_" + type);
+		this.setCreativeTab(DungeonTools.dungeonTab);
 		if(type != "basic") this.setMaxStackSize(1);
 		this.type = type;
 		this.skeleton = type.equals("skeleton");

@@ -6,9 +6,7 @@ import com.theredmajora.dungeontools.tileentity.TileEntityGroundItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderFallingBlock;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,10 +31,10 @@ public class ClientProxy
 	public void openWrittenNote(EntityPlayer player, ItemStack item)
 	{ Minecraft.getMinecraft().displayGuiScreen(new GuiScreenNote(player, item)); }
 	
-	public class RenderFallingPushBlockFactory implements IRenderFactory<EntityFallingBlock> {
+	public class RenderFallingPushBlockFactory implements IRenderFactory<EntityFallingPushBlock> {
 		@Override
-		public Render<? super EntityFallingBlock> createRenderFor(RenderManager manager) {
-			{ return new RenderFallingBlock(manager); }
+		public Render<? super EntityFallingPushBlock> createRenderFor(RenderManager manager) {
+			{ return new RenderFallingPushBlock(manager); }
 		}
 	}
 }

@@ -2,8 +2,11 @@ package com.theredmajora.dungeontools.blocks;
 
 import javax.annotation.Nullable;
 
+import com.theredmajora.dungeontools.DungeonTools;
 import com.theredmajora.dungeontools.tileentity.TileEntityGroundItem;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -20,20 +23,19 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockGroundItem extends BlockDungeon
+public class BlockGroundItem extends Block implements ITileEntityProvider
 {
 	public BlockGroundItem()
 	{
-		super(Material.GLASS, "ground_item_block");
+		super(Material.GLASS);
+		this.setCreativeTab(DungeonTools.dungeonTab);
+		this.setUnlocalizedName("ground_item_block");
+		this.setRegistryName("ground_item_block");
 		this.setBlockUnbreakable();
 	}
 	
 	@Override
-    public boolean hasTileEntity()
-    { return true; }
-    
-	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
+	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityGroundItem();
 	}
 

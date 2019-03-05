@@ -3,11 +3,13 @@ package com.theredmajora.dungeontools.items;
 import java.util.List;
 
 import com.theredmajora.dungeontools.DungeonSounds;
+import com.theredmajora.dungeontools.DungeonTools;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
@@ -19,11 +21,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemNBTTransfer extends ItemDungeon
+public class ItemNBTTransfer extends Item
 {
     public ItemNBTTransfer()
     {
-    	super("nbt_transfer");
+    	super();
+		this.setUnlocalizedName("nbt_transfer");
+		this.setRegistryName("nbt_transfer");
+		this.setCreativeTab(DungeonTools.dungeonTab);
         this.setMaxStackSize(1);
     }
 

@@ -3,6 +3,7 @@ package com.theredmajora.dungeontools.blocks;
 import java.util.Random;
 
 import com.theredmajora.dungeontools.DungeonItems;
+import com.theredmajora.dungeontools.DungeonTools;
 import com.theredmajora.dungeontools.extra.IColorType;
 import com.theredmajora.dungeontools.extra.IUnlockable;
 
@@ -20,7 +21,6 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,11 +37,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockLockedDoor extends BlockDungeon implements IUnlockable, IColorType
+public class BlockLockedDoor extends Block implements IUnlockable, IColorType
 {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public static final PropertyBool OPEN = PropertyBool.create("open");
@@ -57,7 +56,10 @@ public class BlockLockedDoor extends BlockDungeon implements IUnlockable, IColor
     
     public BlockLockedDoor(Material materialIn, String type)
     {
-        super(materialIn, "door_" + type);
+        super(materialIn);
+        this.setCreativeTab(DungeonTools.dungeonTab);
+        this.setUnlocalizedName("door_" + type);
+        this.setRegistryName("door_" + type);
         this.setBlockUnbreakable();
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(OPEN, Boolean.valueOf(false)).withProperty(HINGE, BlockDoor.EnumHingePosition.LEFT).withProperty(POWERED, Boolean.valueOf(false)).withProperty(HALF, BlockDoor.EnumDoorHalf.LOWER));
         this.type = type;
@@ -519,13 +521,6 @@ public class BlockLockedDoor extends BlockDungeon implements IUnlockable, IColor
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
     {
         return BlockFaceShape.UNDEFINED;
-    }
-    
-    @Override
-    public void registerBlockModel()
-    {
-	    ModelLoader.setCustomStateMapper(this, (new StateMap.Builder()).ignore(POWERED).build());
-    	super.registerBlockModel();
     }
     
     @Override

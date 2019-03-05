@@ -2,8 +2,11 @@ package com.theredmajora.dungeontools.blocks;
 
 import javax.annotation.Nullable;
 
+import com.theredmajora.dungeontools.DungeonTools;
 import com.theredmajora.dungeontools.tileentity.TileEntityVanish;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -18,7 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockVanish extends BlockDungeon
+public class BlockVanish extends Block implements ITileEntityProvider
 {
     public static final AxisAlignedBB VANISHED_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
     public static final PropertyBool VANISH = PropertyBool.create("vanish");
@@ -26,16 +29,15 @@ public class BlockVanish extends BlockDungeon
 	
 	public BlockVanish(Material mat, String name, boolean setToAir)
 	{
-		super(mat, name);
+		super(mat);
+		this.setUnlocalizedName(name);
+		this.setRegistryName(name);
+		this.setCreativeTab(DungeonTools.dungeonTab);
 		this.setToAir = setToAir;
 	}
 
 	@Override
-    public boolean hasTileEntity()
-    { return true; }
-    
-	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
+	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityVanish();
 	}
     

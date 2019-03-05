@@ -3,10 +3,13 @@ package com.theredmajora.dungeontools.blocks;
 import java.util.Random;
 
 import com.theredmajora.dungeontools.DungeonConfig;
+import com.theredmajora.dungeontools.DungeonItems;
+import com.theredmajora.dungeontools.DungeonTools;
 import com.theredmajora.dungeontools.extra.EntityFallingPushBlock;
 import com.theredmajora.dungeontools.tileentity.TileEntityPushBlock;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,20 +24,26 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockPush extends BlockDungeon
+public class BlockPush extends Block implements ITileEntityProvider
 {
 	boolean heavy;
     
 	public BlockPush(boolean isHeavy)
 	{
-		super(Material.ROCK, (isHeavy ? "push_block_heavy" : "push_block"));
+		super(Material.ROCK);
+		String name = isHeavy ? "push_block_heavy" : "push_block";
+		this.setUnlocalizedName(name);
+		this.setRegistryName(name);
+		this.setCreativeTab(DungeonTools.dungeonTab);
 		this.setBlockUnbreakable();
+		
 		heavy = isHeavy;
 	}
     
 
     public void onBlockClicked(World world, BlockPos pos, EntityPlayer player)
     {
+    	if(heavy && !player.getHeldItemMainhand().getItem().equals(DungeonItems.gauntlet)) return;
 		TileEntityPushBlock te = (TileEntityPushBlock) world.getTileEntity(pos);
 		if(te.isValidPos(player)) updatePushBlock(world, pos, te.getReturnPos());
     	
@@ -44,6 +53,8 @@ public class BlockPush extends BlockDungeon
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
+    	if(heavy && !player.getHeldItem(hand).getItem().equals(DungeonItems.gauntlet)) return false;
+    	
     	TileEntityPushBlock te = (TileEntityPushBlock) world.getTileEntity(pos);
 		
     	if(player.isSneaking())
@@ -210,12 +221,8 @@ public class BlockPush extends BlockDungeon
         return -16777216;
     }
 
-    @Override
-    public boolean hasTileEntity()
-    { return true; }
-    
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
+	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityPushBlock();
 	}
 }

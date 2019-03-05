@@ -5,6 +5,7 @@ import com.theredmajora.dungeontools.DungeonTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemWritableBook;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,11 +23,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemWrittenNote extends ItemDungeon
+public class ItemWrittenNote extends Item
 {
     public ItemWrittenNote()
     {
-    	super("written_note");
+    	super();
+		this.setUnlocalizedName("written_note");
+		this.setRegistryName("written_note");
+		this.setCreativeTab(DungeonTools.dungeonTab);
         this.setMaxStackSize(1);
     }
 

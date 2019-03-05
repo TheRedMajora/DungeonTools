@@ -1,6 +1,8 @@
 package com.theredmajora.dungeontools.blocks;
 
 import com.theredmajora.dungeontools.DungeonConfig;
+import com.theredmajora.dungeontools.DungeonTools;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -12,14 +14,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockPushSwitch extends BlockDungeon
+public class BlockPushSwitch extends Block
 {
 	boolean heavy;
     public static final PropertyBool ACTIVATED = PropertyBool.create("activated");
     
 	public BlockPushSwitch(boolean isHeavy)
 	{
-		super(Material.ROCK, (isHeavy ? "push_switch_heavy" : "push_switch"));
+		super(Material.ROCK);
+		String name = isHeavy ? "push_switch_heavy" : "push_switch";
+		this.setUnlocalizedName(name);
+		this.setRegistryName(name);
+		this.setCreativeTab(DungeonTools.dungeonTab);
 		this.setBlockUnbreakable();
 		heavy = isHeavy;
 	}
@@ -49,10 +55,10 @@ public class BlockPushSwitch extends BlockDungeon
 		return state.withProperty(ACTIVATED, true); }
 	@Override
     public boolean canProvidePower(IBlockState state)
-    { return state.getValue(ACTIVATED); }
+    { return true; }
 	@Override
     public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
-    { return 15; }
+    { return blockState.getValue(ACTIVATED) ? 15 : 0; }
     @Override
     public IBlockState getStateFromMeta(int meta) {
     	return this.getDefaultState().withProperty(ACTIVATED, meta == 1); }

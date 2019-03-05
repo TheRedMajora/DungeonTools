@@ -6,11 +6,9 @@ import com.theredmajora.dungeontools.extra.IUnlockable;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockLock extends BlockVanish implements IUnlockable, IColorType
 {
@@ -37,11 +35,4 @@ public class BlockLock extends BlockVanish implements IUnlockable, IColorType
 		world.setBlockState(pos, ((BlockVanish) state.getBlock()).getVanishedState(state));
 		return true;
 	}
-
-    @Override
-    public void registerBlockModel()
-    {
-	    ModelLoader.setCustomStateMapper(this, (new StateMap.Builder()).ignore(VANISH).build());
-    	super.registerBlockModel();
-    }
 }

@@ -5,6 +5,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
+import com.theredmajora.dungeontools.DungeonTools;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -24,7 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockUnlitTorch extends BlockDungeon
+public class BlockUnlitTorch extends Block
 {
     public static final PropertyDirection FACING = PropertyDirection.create("facing", new Predicate<EnumFacing>()
     {
@@ -41,8 +42,11 @@ public class BlockUnlitTorch extends BlockDungeon
 
     public BlockUnlitTorch()
     {
-        super(Material.CIRCUITS, "unlit_torch");
+        super(Material.CIRCUITS);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP));
+		this.setUnlocalizedName("unlit_torch");
+		this.setRegistryName("unlit_torch");
+		this.setCreativeTab(DungeonTools.dungeonTab);
         this.setTickRandomly(true);
     }
 

@@ -7,6 +7,7 @@ item.lantern_empty.name=Empty Lantern
 item.written_note.name=Blank Note
 item.nbt_transfer.name=NBT Transfer Tool
 item.nbt_transfer.desc=Right-click to move NBT Data from the leftmost item in your hotbar, to the rightmost item in your hotbar.
+item.gauntlet.name=Gauntlet of Strength
 
 //Keys
 item.key_great.name=Great Key
@@ -105,6 +106,9 @@ tile.vanish_chain_red.name=Red Chain Block (Reappearing)
 tile.vanish_lock_red.name=Red Lock Block (Reappearing)
 tile.vanish_chain_basic.name=Basic Chain Block (Reappearing)
 tile.vanish_lock_basic.name=Basic Lock Block (Reappearing)
+
+tile.chain_redstone.name=Redstone Chains
+tile.vanish_chain_redstone.name=Redstone Chains (Reappearing)
 
 //Messages
 tile.ground_item_block.blocks=Blocks aren't compatible!

@@ -1,23 +1,26 @@
 package com.theredmajora.dungeontools.items;
 
-import com.theredmajora.dungeontools.blocks.BlockLockedDoor;
+import com.theredmajora.dungeontools.DungeonItems;
+import com.theredmajora.dungeontools.DungeonTools;
 
-import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
-public class ItemDebug extends ItemDungeon
+public class ItemDebug extends Item
 {	
     public ItemDebug()
     {
-    	super("debug");
+    	super();
+		this.setUnlocalizedName("debug");
+		this.setRegistryName("debug");
+		this.setCreativeTab(DungeonTools.dungeonTab);
         this.maxStackSize = 1;
     }
     
@@ -27,32 +30,10 @@ public class ItemDebug extends ItemDungeon
     {
     	ItemStack stack = player.getHeldItem(hand);
     	IBlockState state = world.getBlockState(pos);
-    	
-    	if(state.getBlock() instanceof BlockLockedDoor)
-    	{
-			BlockLockedDoor block = (BlockLockedDoor) state.getBlock();
 
-			state.neighborChanged(world, pos, block, pos);
+    	world.setBlockState(pos.up(), DungeonItems.push_block.getDefaultState(), 11);
+    	world.setBlockState(pos.up().up(), DungeonItems.push_block_heavy.getDefaultState(), 11);
 			
-			if(!world.isRemote)
-			{
-				player.sendMessage(new TextComponentTranslation("Locked Door FACING: " + state.getValue(BlockLockedDoor.FACING)));
-				player.sendMessage(new TextComponentTranslation("Locked Door HALF: " + state.getValue(BlockLockedDoor.HALF)));
-				player.sendMessage(new TextComponentTranslation("Locked Door HINGE: " + state.getValue(BlockLockedDoor.HINGE)));
-				player.sendMessage(new TextComponentTranslation("Locked Door OPEN: " + state.getValue(BlockLockedDoor.OPEN)));
-				player.sendMessage(new TextComponentTranslation("Locked Door POWERED: " + state.getValue(BlockLockedDoor.POWERED)));
-				
-				player.sendMessage(new TextComponentTranslation("Door FACING: " + state.getValue(BlockDoor.FACING)));
-				player.sendMessage(new TextComponentTranslation("Door HALF: " + state.getValue(BlockDoor.HALF)));
-				player.sendMessage(new TextComponentTranslation("Door HINGE: " + state.getValue(BlockDoor.HINGE)));
-				player.sendMessage(new TextComponentTranslation("Door OPEN: " + state.getValue(BlockDoor.OPEN)));
-				player.sendMessage(new TextComponentTranslation("Door POWERED: " + state.getValue(BlockDoor.POWERED)));
-			}
-			
-			
-            return EnumActionResult.SUCCESS;
-    	}
-    	
-        return EnumActionResult.PASS;
+        return EnumActionResult.SUCCESS;
     }
 }
