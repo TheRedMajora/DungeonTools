@@ -7,7 +7,6 @@ import com.theredmajora.dungeontools.DungeonItems;
 import com.theredmajora.dungeontools.blocks.BlockPush;
 import com.theredmajora.dungeontools.tileentity.TileEntityPushBlock;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -23,11 +22,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityFallingPushBlock extends Entity implements IEntityAdditionalSpawnData
+public class EntityFallingPushBlock extends Entity
 {
 	public boolean heavy;
     public int fallTime;
@@ -218,14 +216,4 @@ public class EntityFallingPushBlock extends Entity implements IEntityAdditionalS
     {
         return true;
     }
-
-	@Override
-	public void writeSpawnData(ByteBuf buffer) {
-		//buffer.setBoolean(1, this.heavy);
-	}
-
-	@Override
-	public void readSpawnData(ByteBuf additionalData) {
-		//this.heavy = additionalData.getBoolean(1);
-	}
 }

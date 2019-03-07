@@ -10,6 +10,7 @@ import com.theredmajora.dungeontools.blocks.BlockVanish;
 
 import net.minecraft.block.BlockTorch;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -49,6 +50,13 @@ public class ItemLantern extends Item
         });
     }
     
+    @Override
+	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+		boolean flag = super.onLeftClickEntity(stack, player, entity);
+		entity.setFire(2);
+		return flag;
+	}
+
 	@Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float x, float y, float z)
     {
@@ -73,7 +81,6 @@ public class ItemLantern extends Item
 
             return EnumActionResult.PASS;
     	}
-
 
 		world.playSound(player, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
         return EnumActionResult.PASS;

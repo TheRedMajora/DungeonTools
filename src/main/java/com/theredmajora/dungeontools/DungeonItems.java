@@ -11,7 +11,7 @@ import com.theredmajora.dungeontools.blocks.BlockRedstoneChains;
 import com.theredmajora.dungeontools.blocks.BlockUnlitTorch;
 import com.theredmajora.dungeontools.blocks.BlockVanishChains;
 import com.theredmajora.dungeontools.blocks.BlockVanishLock;
-import com.theredmajora.dungeontools.items.ItemDebug;
+import com.theredmajora.dungeontools.items.ItemGauntlet;
 import com.theredmajora.dungeontools.items.ItemKey;
 import com.theredmajora.dungeontools.items.ItemLantern;
 import com.theredmajora.dungeontools.items.ItemLockedDoor;
@@ -111,9 +111,9 @@ public class DungeonItems
 	public static Item lantern = new ItemLantern();
 	public static Item lantern_oil = new Item().setCreativeTab(DungeonTools.dungeonTab).setUnlocalizedName("lantern_oil").setRegistryName("lantern_oil");
 
-	public static Item gauntlet = new Item().setCreativeTab(DungeonTools.dungeonTab).setUnlocalizedName("gauntlet").setRegistryName("gauntlet").setMaxStackSize(1);
+	public static Item gauntlet = new ItemGauntlet();
 	
-	public static Block door_great = new BlockLockedDoor(Material.IRON, "great");
+	public static Block door_great = new BlockLockedDoor(Material.ROCK, "great");
 	public static Block door_locked_great = new BlockLockedDoor(Material.ROCK, "locked_great");
 	public static Block door_locked_basic = new BlockLockedDoor(Material.WOOD, "locked_basic");
 	public static Block door_locked_red = new BlockLockedDoor(Material.WOOD, "locked_red");
@@ -125,6 +125,7 @@ public class DungeonItems
 	public static Block door_locked_yellow = new BlockLockedDoor(Material.ROCK, "locked_yellow");
 	public static Block door_locked_white = new BlockLockedDoor(Material.ROCK, "locked_white");
 	public static Block door_locked_black = new BlockLockedDoor(Material.ROCK, "locked_black");
+	public static Block door_locked_redstone = new BlockLockedDoor(Material.WOOD, "locked_redstone");
 	
 	public static Item door_great_item = new ItemLockedDoor("great", door_great);
 	public static Item door_locked_basic_item = new ItemLockedDoor("locked_basic", door_locked_basic);
@@ -138,6 +139,7 @@ public class DungeonItems
 	public static Item door_locked_black_item = new ItemLockedDoor("locked_black", door_locked_black);
 	public static Item door_locked_white_item = new ItemLockedDoor("locked_white", door_locked_white);
 	public static Item door_locked_great_item = new ItemLockedDoor("locked_great", door_locked_great);
+	public static Item door_locked_redstone_item = new ItemLockedDoor("locked_redstone", door_locked_redstone);
 	
 
 	/**public static BlockLockedChest chest_basic = new BlockLockedChest("basic");
@@ -152,5 +154,5 @@ public class DungeonItems
 	public static BlockLockedChest chest_black = new BlockLockedChest("black");
 	public static BlockLockedChest chest_great = new BlockLockedChest("great");*/
 	
-	public static Item debug = new ItemDebug();
+	//public static Item debug = new ItemDebug();
 }

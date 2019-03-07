@@ -11,8 +11,13 @@ import com.theredmajora.dungeontools.tileentity.TileEntityPushBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -34,17 +39,53 @@ public class BlockPush extends Block
 		this.setUnlocalizedName(name);
 		this.setRegistryName(name);
 		this.setCreativeTab(DungeonTools.dungeonTab);
-		this.setBlockUnbreakable();
+        this.setHardness(50.0F);
+        this.setResistance(2000.0F);
 		
 		heavy = isHeavy;
 	}
-    
 
+	@Override
+    public Item getItemDropped(IBlockState state, Random rand, int fortune)
+    { return Items.AIR; }
+	
+	@Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+    {
+		if(worldIn.getTileEntity(pos) != null && ((TileEntityPushBlock) worldIn.getTileEntity(pos)).hasPosition()) spawnAsEntity(worldIn, pos, this.getItem(worldIn, pos, state));
+		
+        super.breakBlock(worldIn, pos, state);
+    }
+	
+	@Override
+    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
+    {
+        ItemStack itemstack = new ItemStack(Item.getItemFromBlock(this), 1);
+        NBTTagCompound nbttagcompound = ((TileEntityPushBlock)worldIn.getTileEntity(pos)).writeToNBT(new NBTTagCompound());
+        if (!nbttagcompound.hasNoTags())
+        { itemstack.setTagInfo("BlockEntityTag", nbttagcompound); }
+
+        return itemstack;
+    }
+	
+	@Override
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
+	{
+		super.onBlockPlacedBy(world, pos, state, placer, stack);
+		TileEntityPushBlock te = (TileEntityPushBlock) world.getTileEntity(pos);
+		if(placer.isSneaking())
+		{
+			te.setReturnPos(pos);
+			if(!world.isRemote) placer.sendMessage(new TextComponentTranslation("tile.push_block.location"));
+		}
+	}
+
+	@Override
     public void onBlockClicked(World world, BlockPos pos, EntityPlayer player)
     {
     	if(heavy && !player.getHeldItemMainhand().getItem().equals(DungeonItems.gauntlet)) return;
 		TileEntityPushBlock te = (TileEntityPushBlock) world.getTileEntity(pos);
-		if(te.isValidPos(player)) updatePushBlock(world, pos, te.getReturnPos());
+		if(te.isValidPos()) updatePushBlock(world, pos, te.getReturnPos());
     	
         world.scheduleUpdate(pos, this, 2);
     }
@@ -80,7 +121,7 @@ public class BlockPush extends Block
         				updatePushBlock(world, pos, pos.west());
         				break;
         			default:
-        				if(te.isValidPos(player)) updatePushBlock(world, pos, te.getReturnPos());
+        				if(te.isValidPos()) updatePushBlock(world, pos, te.getReturnPos());
         				break;
             	}
     		}
@@ -112,7 +153,7 @@ public class BlockPush extends Block
     
     public void updatePushBlock(World world, BlockPos pos, BlockPos newPos)
     {
-    	if(world.getBlockState(newPos).getBlock() instanceof BlockPush)
+    	if(world.getBlockState(newPos).getBlock() instanceof BlockPush && (heavy ? true : !((BlockPush)world.getBlockState(newPos).getBlock()).heavy))
     	{	
 	    	for(BlockPos pos2 : new BlockPos[]{newPos.north(), newPos.south(), newPos.east(), newPos.west()})
 	    	{
@@ -122,6 +163,7 @@ public class BlockPush extends Block
 	    			((TileEntityPushBlock) world.getTileEntity(pos2)).setReturnPos(((TileEntityPushBlock) world.getTileEntity(newPos)).getReturnPos());
 	    			world.setBlockState(newPos, world.getBlockState(pos));
 	    			((TileEntityPushBlock) world.getTileEntity(newPos)).setReturnPos(((TileEntityPushBlock) world.getTileEntity(pos)).getReturnPos());
+	    			world.removeTileEntity(pos);
 	    			world.setBlockToAir(pos);
 	    			break;
 	    		}
@@ -131,6 +173,7 @@ public class BlockPush extends Block
 		{
 			world.setBlockState(newPos, world.getBlockState(pos));
 			((TileEntityPushBlock) world.getTileEntity(newPos)).setReturnPos(((TileEntityPushBlock) world.getTileEntity(pos)).getReturnPos());
+			world.removeTileEntity(pos);
 			world.setBlockToAir(pos);
 		}
     }
@@ -169,6 +212,7 @@ public class BlockPush extends Block
             else
             {
                 IBlockState state = worldIn.getBlockState(pos);
+    			worldIn.removeTileEntity(pos);
                 worldIn.setBlockToAir(pos);
                 BlockPos blockpos;
 

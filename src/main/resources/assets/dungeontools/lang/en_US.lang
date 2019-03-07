@@ -36,6 +36,7 @@ item.door_locked_green_item.name=Green Door (Locked)
 item.door_locked_blue_item.name=Blue Door (Locked)
 item.door_locked_red_item.name=Red Door (Locked)
 item.door_locked_basic_item.name=Basic Door (Locked)
+item.door_locked_redstone_item.name=Redstone Door (Locked)
 
 //Blocks
 tile.ground_item_block.name=Ground Item Block
@@ -45,20 +46,6 @@ tile.push_block.name=Push Block
 tile.push_block_heavy.name=Push Block Heavy
 tile.push_switch.name=Push Switch
 tile.push_switch_heavy.name=Push Switch Heavy
-
-//Locked Door
-tile.door_great.name=Great Door
-tile.door_locked_great.name=Great Door (Locked)
-tile.door_locked_black.name=Black Door (Locked)
-tile.door_locked_white.name=White Door (Locked)
-tile.door_locked_icy.name=Icy Door (Locked)
-tile.door_locked_purple.name=Purple Door (Locked)
-tile.door_locked_orange.name=Orange Door (Locked)
-tile.door_locked_yellow.name=Yellow Door (Locked)
-tile.door_locked_green.name=Green Door (Locked)
-tile.door_locked_blue.name=Blue Door (Locked)
-tile.door_locked_red.name=Red Door (Locked)
-tile.door_locked_basic.name=Basic Door (Locked)
 
 //Locks and Chains
 tile.chain_great.name=Great Chain Block
@@ -83,6 +70,7 @@ tile.chain_red.name=Red Chain Block
 tile.lock_red.name=Red Lock Block
 tile.chain_basic.name=Basic Chain Block
 tile.lock_basic.name=Basic Lock Block
+tile.chain_redstone.name=Redstone Chains
 //Reappearing Version
 tile.vanish_chain_great.name=Great Chain Block (Reappearing)
 tile.vanish_lock_great.name=Great Lock Block (Reappearing)
@@ -106,8 +94,6 @@ tile.vanish_chain_red.name=Red Chain Block (Reappearing)
 tile.vanish_lock_red.name=Red Lock Block (Reappearing)
 tile.vanish_chain_basic.name=Basic Chain Block (Reappearing)
 tile.vanish_lock_basic.name=Basic Lock Block (Reappearing)
-
-tile.chain_redstone.name=Redstone Chains
 tile.vanish_chain_redstone.name=Redstone Chains (Reappearing)
 
 //Messages

@@ -45,14 +45,10 @@ public class ItemKey extends Item
 			
 			if(DungeonConfig.greatSkeletonKey ? skeleton || isType : (skeleton && !((IColorType) block).getType().equals("great")) || isType)
 			{
-				if(block.unlock(world, player, pos, state))
+				if(block.unlock(world, pos, state))
 				{
 					world.playSound(player, pos, DungeonSounds.lock, SoundCategory.BLOCKS, 1.0F, world.rand.nextFloat() * 0.4F + 0.8F);
-					
-					
-					int behavior = DungeonConfig.keyBehavior;
-					if(behavior == 0 || (behavior == 1 && !skeleton) || (behavior == 2 && type.equals("basic"))) stack.shrink(1);
-					
+					if(getBreakFromConfig(type)) stack.shrink(1);
                 	return EnumActionResult.SUCCESS;
 				}
 			}
@@ -61,4 +57,35 @@ public class ItemKey extends Item
 
     	return EnumActionResult.PASS;
     }
+
+	private boolean getBreakFromConfig(String type)
+	{
+        switch(type)
+        {
+        	case "basic":
+        		return DungeonConfig.basicKeyBreak;
+        	case "red":
+        		return DungeonConfig.redKeyBreak;
+        	case "blue":
+        		return DungeonConfig.blueKeyBreak;
+        	case "green":
+        		return DungeonConfig.greenKeyBreak;
+        	case "orange":
+        		return DungeonConfig.orangeKeyBreak;
+        	case "yellow":
+        		return DungeonConfig.yellowKeyBreak;
+        	case "purple":
+        		return DungeonConfig.purpleKeyBreak;
+        	case "icy":
+        		return DungeonConfig.icyKeyBreak;
+        	case "white":
+        		return DungeonConfig.whiteKeyBreak;
+        	case "black":
+        		return DungeonConfig.blackKeyBreak;
+        	case "great":
+        		return DungeonConfig.greatKeyBreak;
+        	default:
+        		return DungeonConfig.skeletonKeyBreak;
+        }
+	}
 }

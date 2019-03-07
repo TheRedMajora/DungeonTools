@@ -70,7 +70,7 @@ public class DungeonTools
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
-    { proxy.preInit(); DungeonConfig.createConfig(event); }
+    { proxy.preInit(); DungeonConfig.createConfig(event.getSuggestedConfigurationFile()); }
     
     @EventBusSubscriber(modid = DungeonTools.ID)
     public static class RegistryHandler

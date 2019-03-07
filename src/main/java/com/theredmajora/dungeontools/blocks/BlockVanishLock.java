@@ -6,7 +6,6 @@ import com.theredmajora.dungeontools.extra.IUnlockable;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -17,7 +16,6 @@ public class BlockVanishLock extends BlockVanish implements IUnlockable, IColorT
 	public BlockVanishLock(String type)
 	{
 		super(Material.IRON, "vanish_lock_" + type, false);
-        this.setBlockUnbreakable();
 		this.type = type;
 	}
 	
@@ -31,7 +29,7 @@ public class BlockVanishLock extends BlockVanish implements IUnlockable, IColorT
     }
 
 	@Override
-	public boolean unlock(World world, EntityPlayer player, BlockPos pos, IBlockState state) {
+	public boolean unlock(World world, BlockPos pos, IBlockState state) {
 		world.setBlockState(pos, ((BlockVanish) state.getBlock()).getVanishedState(state));
 		return true;
 	}

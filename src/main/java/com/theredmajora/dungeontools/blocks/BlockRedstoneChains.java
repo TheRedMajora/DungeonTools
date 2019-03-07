@@ -15,7 +15,6 @@ public class BlockRedstoneChains extends BlockVanish
 	public BlockRedstoneChains(boolean vanish)
 	{
 		super(Material.IRON, vanish ? "vanish_chain_redstone" : "chain_redstone", !vanish);
-        this.setBlockUnbreakable();
         doesVanish = vanish;
 	}
 

@@ -13,7 +13,6 @@ public class BlockChains extends BlockVanish implements IColorType
 	public BlockChains(String type)
 	{
 		super(Material.IRON, "chain_" + type, true);
-        this.setBlockUnbreakable();
 		this.type = type;
 	}
 	

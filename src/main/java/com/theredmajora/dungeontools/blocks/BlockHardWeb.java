@@ -9,7 +9,6 @@ public class BlockHardWeb extends BlockVanish
     public BlockHardWeb()
     {
 		super(Material.WEB, "hard_web", true);
-		this.setBlockUnbreakable();
     }
 
     @Override

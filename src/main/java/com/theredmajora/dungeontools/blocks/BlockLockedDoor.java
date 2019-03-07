@@ -2,6 +2,7 @@ package com.theredmajora.dungeontools.blocks;
 
 import java.util.Random;
 
+import com.theredmajora.dungeontools.DungeonConfig;
 import com.theredmajora.dungeontools.DungeonItems;
 import com.theredmajora.dungeontools.DungeonTools;
 import com.theredmajora.dungeontools.extra.IColorType;
@@ -43,10 +44,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockLockedDoor extends Block implements IUnlockable, IColorType
 {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
-    public static final PropertyBool OPEN = PropertyBool.create("open");
-    public static final PropertyEnum<BlockDoor.EnumHingePosition> HINGE = PropertyEnum.<BlockDoor.EnumHingePosition>create("hinge", BlockDoor.EnumHingePosition.class);
-    public static final PropertyBool POWERED = PropertyBool.create("powered");
-    public static final PropertyEnum<BlockDoor.EnumDoorHalf> HALF = PropertyEnum.<BlockDoor.EnumDoorHalf>create("half", BlockDoor.EnumDoorHalf.class);
+    public static final PropertyBool OPEN = BlockDoor.OPEN;
+    public static final PropertyEnum<BlockDoor.EnumHingePosition> HINGE = BlockDoor.HINGE;
+    public static final PropertyBool POWERED = BlockDoor.POWERED;
+    public static final PropertyEnum<BlockDoor.EnumDoorHalf> HALF = BlockDoor.HALF;
     protected static final AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.1875D);
     protected static final AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.8125D, 1.0D, 1.0D, 1.0D);
     protected static final AxisAlignedBB WEST_AABB = new AxisAlignedBB(0.8125D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
@@ -60,16 +61,18 @@ public class BlockLockedDoor extends Block implements IUnlockable, IColorType
         this.setCreativeTab(DungeonTools.dungeonTab);
         this.setUnlocalizedName("door_" + type);
         this.setRegistryName("door_" + type);
-        this.setBlockUnbreakable();
+        this.setHardness(50.0F);
+        this.setResistance(2000.0F);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(OPEN, Boolean.valueOf(false)).withProperty(HINGE, BlockDoor.EnumHingePosition.LEFT).withProperty(POWERED, Boolean.valueOf(false)).withProperty(HALF, BlockDoor.EnumDoorHalf.LOWER));
         this.type = type;
     }
-
+    
 	public String getType()
 	{
 		return this.type.substring(this.type.lastIndexOf("_") + 1);
 	}
-    
+
+    @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
         state = state.getActualState(source, pos);
@@ -91,30 +94,25 @@ public class BlockLockedDoor extends Block implements IUnlockable, IColorType
         }
     }
 
-    /**
-     * Gets the localized name of this block. Used for the statistics page.
-     */
+    @Override
     public String getLocalizedName()
     {
         return I18n.format((this.getUnlocalizedName() + ".name").replaceAll("tile", "item"));
     }
 
-    /**
-     * Used to determine ambient occlusion and culling when rebuilding chunks for render
-     */
+    @Override
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
 
-    /**
-     * Determines if an entity can path through this block
-     */
+    @Override
     public boolean isPassable(IBlockAccess worldIn, BlockPos pos)
     {
         return isOpen(combineMetadata(worldIn, pos));
     }
 
+    @Override
     public boolean isFullCube(IBlockState state)
     {
         return false;
@@ -130,14 +128,14 @@ public class BlockLockedDoor extends Block implements IUnlockable, IColorType
         return 1005;
     }
 
-    /**
-     * Get the MapColor for this Block and the given BlockState
-     */
+    @Override
     public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos)
     {
         switch(type)
         {
         	case "locked_basic":
+        		return BlockPlanks.EnumType.OAK.getMapColor();
+        	case "locked_redstone":
         		return BlockPlanks.EnumType.OAK.getMapColor();
         	case "locked_red":
         		return BlockPlanks.EnumType.BIRCH.getMapColor();
@@ -162,12 +160,10 @@ public class BlockLockedDoor extends Block implements IUnlockable, IColorType
         }
     }
 
-    /**
-     * Called when the block is right clicked by a player.
-     */
+    @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        if (this.blockMaterial != Material.IRON) return false; 
+        if (!type.equals("great")) return false; 
         else
         {
             BlockPos blockpos = state.getValue(HALF) == BlockDoor.EnumDoorHalf.LOWER ? pos : pos.down();
@@ -203,11 +199,7 @@ public class BlockLockedDoor extends Block implements IUnlockable, IColorType
         }
     }
 
-    /**
-     * Called when a neighboring block was changed and marks that this state should perform any checks during a neighbor
-     * change. Cases may include when redstone power is updated, cactus blocks popping off due to a neighboring solid
-     * block, etc.
-     */
+    @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
     {
         if (state.getValue(HALF) == BlockDoor.EnumDoorHalf.UPPER)
@@ -254,36 +246,40 @@ public class BlockLockedDoor extends Block implements IUnlockable, IColorType
                     this.dropBlockAsItem(worldIn, pos, state, 0);
                 }
             }
-            else
+            else if(type.equals("great") || type.equals("locked_redstone"))
             {
-                boolean flag = Material.IRON.equals(this.blockMaterial) && (worldIn.isBlockPowered(pos) || worldIn.isBlockPowered(blockpos1));
+            	boolean flag = (worldIn.isBlockPowered(pos) || worldIn.isBlockPowered(blockpos1));
 
                 if (blockIn != this && (flag || blockIn.getDefaultState().canProvidePower()) && flag != ((Boolean)iblockstate1.getValue(POWERED)).booleanValue())
                 {
                     worldIn.setBlockState(blockpos1, iblockstate1.withProperty(POWERED, Boolean.valueOf(flag)), 2);
 
-                    if (flag != ((Boolean)state.getValue(OPEN)).booleanValue())
+                    if(type.equals("great") && flag != ((Boolean)state.getValue(OPEN)).booleanValue())
                     {
                         worldIn.setBlockState(pos, state.withProperty(OPEN, Boolean.valueOf(flag)), 2);
                         worldIn.markBlockRangeForRenderUpdate(pos, pos);
                         worldIn.playEvent((EntityPlayer)null, flag ? this.getOpenSound() : this.getCloseSound(), pos, 0);
+                    }
+                    else
+                    {
+                        worldIn.scheduleUpdate(pos, this, 2);
                     }
                 }
             }
         }
     }
 
-    /**
-     * Get the Item that this Block should drop when harvested.
-     */
+    @Override
+    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand)
+    { this.doUnlock(world, pos.up(), world.getBlockState(pos.up())); }
+
+    @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
         return state.getValue(HALF) == BlockDoor.EnumDoorHalf.UPPER ? Items.AIR : this.getItem();
     }
-
-    /**
-     * Checks if this block can be placed exactly at the given position.
-     */
+    
+    @Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
     {
         if (pos.getY() >= worldIn.getHeight() - 1)
@@ -297,6 +293,7 @@ public class BlockLockedDoor extends Block implements IUnlockable, IColorType
         }
     }
 
+    @Override
     public EnumPushReaction getMobilityFlag(IBlockState state)
     {
         return EnumPushReaction.DESTROY;
@@ -355,10 +352,7 @@ public class BlockLockedDoor extends Block implements IUnlockable, IColorType
         }
     }
 
-    /**
-     * Called before the Block is set to air in the world. Called regardless of if the player's tool can actually
-     * collect this block
-     */
+    @Override
     public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player)
     {
         BlockPos blockpos = pos.down();
@@ -380,16 +374,14 @@ public class BlockLockedDoor extends Block implements IUnlockable, IColorType
         }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer()
     {
         return BlockRenderLayer.CUTOUT;
     }
 
-    /**
-     * Get the actual Block state of this Block at the given position. This applies properties not visible in the
-     * metadata, such as fence connections.
-     */
+    @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
     {
         if (state.getValue(HALF) == BlockDoor.EnumDoorHalf.LOWER)
@@ -414,35 +406,25 @@ public class BlockLockedDoor extends Block implements IUnlockable, IColorType
         return state;
     }
 
-    /**
-     * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
-     * blockstate.
-     */
+    @Override
     public IBlockState withRotation(IBlockState state, Rotation rot)
     {
         return state.getValue(HALF) != BlockDoor.EnumDoorHalf.LOWER ? state : state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
     }
 
-    /**
-     * Returns the blockstate with the given mirror of the passed blockstate. If inapplicable, returns the passed
-     * blockstate.
-     */
+    @Override
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
     {
         return mirrorIn == Mirror.NONE ? state : state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING))).cycleProperty(HINGE);
     }
 
-    /**
-     * Convert the given metadata into a BlockState for this Block
-     */
+    @Override
     public IBlockState getStateFromMeta(int meta)
     {
         return (meta & 8) > 0 ? this.getDefaultState().withProperty(HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(HINGE, (meta & 1) > 0 ? BlockDoor.EnumHingePosition.RIGHT : BlockDoor.EnumHingePosition.LEFT).withProperty(POWERED, Boolean.valueOf((meta & 2) > 0)) : this.getDefaultState().withProperty(HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(FACING, EnumFacing.getHorizontal(meta & 3).rotateYCCW()).withProperty(OPEN, Boolean.valueOf((meta & 4) > 0));
     }
 
-    /**
-     * Convert the BlockState into the correct metadata value
-     */
+    @Override
     public int getMetaFromState(IBlockState state)
     {
         int i = 0;
@@ -504,20 +486,13 @@ public class BlockLockedDoor extends Block implements IUnlockable, IColorType
         return (meta & 8) != 0;
     }
 
+    @Override
     protected BlockStateContainer createBlockState()
     {
         return new BlockStateContainer(this, new IProperty[] {HALF, FACING, OPEN, HINGE, POWERED});
     }
 
-    /**
-     * Get the geometry of the queried face at the given position and state. This is used to decide whether things like
-     * buttons are allowed to be placed on the face, or how glass panes connect to the face, among other things.
-     * <p>
-     * Common values are {@code SOLID}, which is the default, and {@code UNDEFINED}, which represents something that
-     * does not fit the other descriptions and will generally cause other things not to connect to the face.
-     * 
-     * @return an approximation of the form of the given face
-     */
+    @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
     {
         return BlockFaceShape.UNDEFINED;
@@ -532,6 +507,8 @@ public class BlockLockedDoor extends Block implements IUnlockable, IColorType
         switch(type)
         {
         	case "locked_basic":
+        		return Blocks.OAK_DOOR;
+        	case "locked_redstone":
         		return Blocks.OAK_DOOR;
         	case "locked_red":
         		return Blocks.BIRCH_DOOR;
@@ -557,33 +534,27 @@ public class BlockLockedDoor extends Block implements IUnlockable, IColorType
 	}
 
 	@Override
-	public boolean unlock(World world, EntityPlayer player, BlockPos pos, IBlockState state)
+	public boolean unlock(World world, BlockPos pos, IBlockState state)
+	{
+		if(!type.equals("locked_redstone")) return doUnlock(world, pos, state);
+		else return false;
+	}
+
+	public boolean doUnlock(World world, BlockPos pos, IBlockState state)
 	{
 		if(state.getValue(HALF).equals(BlockDoor.EnumDoorHalf.UPPER))
 		{
 			BlockLockedDoor block = (BlockLockedDoor)state.getBlock();
-			IBlockState newState = block.getDoor().getDefaultState();
-			
-			if(block.getDoor().equals(DungeonItems.door_great)) newState = newState
+			IBlockState newState = block.getDoor().getDefaultState()
 					.withProperty(FACING, world.getBlockState(pos.down()).getValue(FACING))
-					.withProperty(OPEN, true)
+					.withProperty(OPEN, DungeonConfig.lockedDoorOpen)
 					.withProperty(HINGE, state.getValue(HINGE))
 					.withProperty(POWERED, state.getValue(POWERED))
 					.withProperty(HALF, BlockDoor.EnumDoorHalf.UPPER);
-			else
-			{
-				if(state.getValue(BlockDoor.FACING) != null) newState = newState
-					.withProperty(BlockDoor.FACING, world.getBlockState(pos.down()).getValue(FACING))
-					.withProperty(BlockDoor.OPEN, true)
-					.withProperty(BlockDoor.HINGE, state.getValue(HINGE))
-					.withProperty(BlockDoor.POWERED, state.getValue(POWERED))
-					.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER);
-			}
-			world.setBlockState(pos, newState);
-			newState = block.getDoor().equals(DungeonItems.door_great) ? newState.cycleProperty(HALF) : newState.cycleProperty(BlockDoor.HALF);
-            world.setBlockState(pos.down(), newState, 10);
+			world.setBlockState(pos, newState, 2);
+            world.setBlockState(pos.down(), newState.cycleProperty(HALF), 2);
             world.markBlockRangeForRenderUpdate(pos.down(), pos);
-
+            
     		return true;
 		}
 		

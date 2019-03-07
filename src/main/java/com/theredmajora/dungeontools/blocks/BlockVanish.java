@@ -11,6 +11,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -33,8 +34,15 @@ public class BlockVanish extends Block
 		this.setRegistryName(name);
 		this.setCreativeTab(DungeonTools.dungeonTab);
 		this.setToAir = setToAir;
+        this.setHardness(50.0F);
+        this.setResistance(2000.0F);
+		this.useNeighborBrightness = true;
 	}
 
+	@Override
+    public boolean canHarvestBlock(IBlockAccess world, BlockPos pos, EntityPlayer player)
+    { return false; }
+	
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new TileEntityVanish();

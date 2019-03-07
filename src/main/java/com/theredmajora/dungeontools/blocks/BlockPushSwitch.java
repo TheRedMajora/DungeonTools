@@ -1,5 +1,7 @@
 package com.theredmajora.dungeontools.blocks;
 
+import java.util.Random;
+
 import com.theredmajora.dungeontools.DungeonConfig;
 import com.theredmajora.dungeontools.DungeonTools;
 
@@ -9,6 +11,8 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -26,10 +30,14 @@ public class BlockPushSwitch extends Block
 		this.setUnlocalizedName(name);
 		this.setRegistryName(name);
 		this.setCreativeTab(DungeonTools.dungeonTab);
-		this.setBlockUnbreakable();
+        this.setHardness(50.0F);
+        this.setResistance(2000.0F);
 		heavy = isHeavy;
 	}
 
+    public Item getItemDropped(IBlockState state, Random rand, int fortune)
+    { return Item.getItemFromBlock(Blocks.IRON_BLOCK); }
+	
 	@Override
     public void onBlockAdded(World world, BlockPos pos, IBlockState state)
     { updateActivation(world, pos); }
