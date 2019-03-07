@@ -1,6 +1,8 @@
-package com.theredmajora.dungeontools.tileentity;
+package com.theredmajora.dungeontools.client;
 
 import org.lwjgl.opengl.GL11;
+
+import com.theredmajora.dungeontools.tileentity.TileEntityGroundItem;
 
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;

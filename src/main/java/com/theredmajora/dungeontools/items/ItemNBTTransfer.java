@@ -8,16 +8,20 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
-public class ItemNBTTransfer extends ItemDungeon
+public class ItemNBTTransfer extends Item
 {
     public ItemNBTTransfer()
     {
-    	super("nbt_transfer");
+    	super();
+		this.setUnlocalizedName("nbt_transfer");
+		this.setTextureName(DungeonTools.ModID + ":" + "nbt_transfer");
+		this.setCreativeTab(DungeonTools.dungeonTab);
         this.setMaxStackSize(1);
     }
 

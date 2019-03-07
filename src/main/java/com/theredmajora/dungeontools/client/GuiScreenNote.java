@@ -1,4 +1,4 @@
-package com.theredmajora.dungeontools.gui;
+package com.theredmajora.dungeontools.client;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;

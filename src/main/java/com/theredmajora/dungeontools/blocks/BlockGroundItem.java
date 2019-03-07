@@ -5,7 +5,7 @@ import com.theredmajora.dungeontools.tileentity.TileEntityGroundItem;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.item.EntityItem;
@@ -20,27 +20,29 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
-public class BlockGroundItem extends BlockContainer
+public class BlockGroundItem extends Block
 {
     @SideOnly(Side.CLIENT)
-    private IIcon blockIcon2;
+    private IIcon vanishIcon;
     
 	public BlockGroundItem()
 	{
 		super(Material.glass);
 		this.setBlockName("ground_item_block");
         this.setBlockTextureName(DungeonTools.ModID + ":ground_item_block");
-		this.setCreativeTab(DungeonTools.bwelluTab);
+		this.setCreativeTab(DungeonTools.dungeonTab);
 		this.setBlockUnbreakable();
 		this.setBlockBounds(0.1F, 0.0F, 0.1F, 0.9F, 0.15F, 0.9F);
 	}
+
+	@Override
+    public TileEntity createTileEntity(World world, int metadata)
+    { return new TileEntityGroundItem(); }
 	
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta)
-	{
-		return new TileEntityGroundItem();
-	}
-
+    public boolean hasTileEntity(int meta)
+    { return true; }
+	
     @Override
 	public void onBlockAdded(World world, int x, int y, int z)
     {
@@ -51,24 +53,22 @@ public class BlockGroundItem extends BlockContainer
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k){
-    	return null;
-    }
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k){ return null; }
     
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int metadata)
     {
     	if(metadata > 0)
-    		return blockIcon;
-        return this.blockIcon2; 
+    		return vanishIcon;
+        return this.blockIcon; 
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public void registerBlockIcons(IIconRegister par1IconRegister){
         this.blockIcon = par1IconRegister.registerIcon(this.getTextureName());
-        this.blockIcon2 = par1IconRegister.registerIcon(getTextureName() + "_visible");
+        this.vanishIcon = par1IconRegister.registerIcon(DungeonTools.ModID + ":" + "vanished_block");
     }
     
     @Override
@@ -122,6 +122,7 @@ public class BlockGroundItem extends BlockContainer
         return 0;
     }
 
+    @Override
     public boolean renderAsNormalBlock()
     {
         return false;
