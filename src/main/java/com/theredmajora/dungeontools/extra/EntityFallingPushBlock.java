@@ -103,6 +103,7 @@ public class EntityFallingPushBlock extends Entity
         if (this.world.getBlockState(blockpos).getBlock() instanceof BlockPush)
         {
         	pushReturnPos = ((TileEntityPushBlock) world.getTileEntity(blockpos)).getReturnPos();
+			this.world.removeTileEntity(blockpos);
             this.world.setBlockToAir(blockpos);
         }
         else if (!this.world.isRemote)

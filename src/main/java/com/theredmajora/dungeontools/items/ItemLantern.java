@@ -18,6 +18,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -52,9 +53,14 @@ public class ItemLantern extends Item
     
     @Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		boolean flag = super.onLeftClickEntity(stack, player, entity);
-		entity.setFire(2);
-		return flag;
+    	if(stack.getItemDamage() != stack.getMaxDamage() - 1)
+    	{
+			entity.setFire(2);
+			entity.attackEntityFrom(DamageSource.ON_FIRE, 1.5F);
+			stack.setItemDamage(Math.min(stack.getMaxDamage() - 1, stack.getItemDamage() + 2));
+    	}
+    	
+		return super.onLeftClickEntity(stack, player, entity);
 	}
 
 	@Override
