@@ -1,4 +1,4 @@
-package com.theredmajora.dungeontools;
+/**package com.theredmajora.dungeontools;
 
 import java.io.File;
 
@@ -96,4 +96,4 @@ public class DungeonConfig
 		greatKeyBreak = greatKeyBreakProp.getBoolean(true);
 		skeletonKeyBreak = skeletonKeyBreakProp.getBoolean(true);
 	}
-}
+}*/

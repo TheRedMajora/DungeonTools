@@ -9,26 +9,26 @@ public class TileEntityGroundItem extends TileEntityBase
 	private int rotationValue;
 	
 	@Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound)
+    public NBTTagCompound write(NBTTagCompound compound)
 	{
-        super.writeToNBT(compound);
+        super.write(compound);
 
-        compound.setInteger("rotation", rotationValue);
+        compound.setInt("rotation", rotationValue);
         
         NBTTagCompound stack2 = new NBTTagCompound();
-        this.item.writeToNBT(stack2);
+        this.item.write(stack2);
         compound.setTag("item", stack2);
         
 		return compound;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound)
+    public void read(NBTTagCompound compound)
     {
-        super.readFromNBT(compound);
+        super.read(compound);;
         
-        this.item = new ItemStack((compound.getCompoundTag("item")));
-        this.rotationValue = compound.getInteger("rotation");
+        this.item = ItemStack.read(compound.getCompound("item"));
+        this.rotationValue = compound.getInt("rotation");
     }
     
     public void setItemStack(ItemStack stack)

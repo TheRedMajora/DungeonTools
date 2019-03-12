@@ -19,6 +19,7 @@ import com.theredmajora.dungeontools.items.ItemNBTTransfer;
 import com.theredmajora.dungeontools.items.ItemWrittenNote;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Block.Properties;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 
@@ -109,23 +110,23 @@ public class DungeonItems
     public static Item key_skeleton = new ItemKey("skeleton");
     
 	public static Item lantern = new ItemLantern();
-	public static Item lantern_oil = new Item().setCreativeTab(DungeonTools.dungeonTab).setUnlocalizedName("lantern_oil").setRegistryName("lantern_oil");
+	public static Item lantern_oil = new Item(null).setRegistryName("lantern_oil");
 
 	public static Item gauntlet = new ItemGauntlet();
-	
-	public static Block door_great = new BlockLockedDoor(Material.ROCK, "great");
-	public static Block door_locked_great = new BlockLockedDoor(Material.ROCK, "locked_great");
-	public static Block door_locked_basic = new BlockLockedDoor(Material.WOOD, "locked_basic");
-	public static Block door_locked_red = new BlockLockedDoor(Material.WOOD, "locked_red");
-	public static Block door_locked_blue = new BlockLockedDoor(Material.WOOD, "locked_blue");
-	public static Block door_locked_green = new BlockLockedDoor(Material.WOOD, "locked_green");
-	public static Block door_locked_orange = new BlockLockedDoor(Material.ROCK, "locked_orange");
-	public static Block door_locked_icy = new BlockLockedDoor(Material.ROCK, "locked_icy");
-	public static Block door_locked_purple = new BlockLockedDoor(Material.ROCK, "locked_purple");
-	public static Block door_locked_yellow = new BlockLockedDoor(Material.ROCK, "locked_yellow");
-	public static Block door_locked_white = new BlockLockedDoor(Material.ROCK, "locked_white");
-	public static Block door_locked_black = new BlockLockedDoor(Material.ROCK, "locked_black");
-	public static Block door_locked_redstone = new BlockLockedDoor(Material.WOOD, "locked_redstone");
+
+	public static Block door_great = new BlockLockedDoor(Properties.create(Material.ROCK).hardnessAndResistance(50.0F, 2000.0F), "great");
+	public static Block door_locked_great = new BlockLockedDoor(Properties.from(door_great), "locked_great");
+	public static Block door_locked_basic = new BlockLockedDoor(Properties.create(Material.WOOD).hardnessAndResistance(50.0F, 2000.0F), "locked_basic");
+	public static Block door_locked_red = new BlockLockedDoor(Properties.from(door_locked_basic), "locked_red");
+	public static Block door_locked_blue = new BlockLockedDoor(Properties.from(door_locked_basic), "locked_blue");
+	public static Block door_locked_green = new BlockLockedDoor(Properties.from(door_locked_basic), "locked_green");
+	public static Block door_locked_orange = new BlockLockedDoor(Properties.from(door_great), "locked_orange");
+	public static Block door_locked_icy = new BlockLockedDoor(Properties.from(door_great), "locked_icy");
+	public static Block door_locked_purple = new BlockLockedDoor(Properties.from(door_great), "locked_purple");
+	public static Block door_locked_yellow = new BlockLockedDoor(Properties.from(door_great), "locked_yellow");
+	public static Block door_locked_white = new BlockLockedDoor(Properties.from(door_great), "locked_white");
+	public static Block door_locked_black = new BlockLockedDoor(Properties.from(door_great), "locked_black");
+	public static Block door_locked_redstone = new BlockLockedDoor(Properties.from(door_locked_basic), "locked_redstone");
 	
 	public static Item door_great_item = new ItemLockedDoor("great", door_great);
 	public static Item door_locked_basic_item = new ItemLockedDoor("locked_basic", door_locked_basic);

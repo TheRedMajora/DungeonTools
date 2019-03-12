@@ -15,12 +15,7 @@ import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
@@ -28,7 +23,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.state.properties.DoorHingeSide;
+import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -38,16 +41,17 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.BlockStateContainer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockLockedDoor extends Block implements IUnlockable, IColorType
 {
-    public static final PropertyDirection FACING = BlockHorizontal.FACING;
-    public static final PropertyBool OPEN = BlockDoor.OPEN;
-    public static final PropertyEnum<BlockDoor.EnumHingePosition> HINGE = BlockDoor.HINGE;
-    public static final PropertyBool POWERED = BlockDoor.POWERED;
-    public static final PropertyEnum<BlockDoor.EnumDoorHalf> HALF = BlockDoor.HALF;
+	public static final DirectionProperty FACING = BlockHorizontal.HORIZONTAL_FACING;
+	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
+	public static final EnumProperty<DoorHingeSide> HINGE = BlockStateProperties.DOOR_HINGE;
+	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+	public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
     protected static final AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.1875D);
     protected static final AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.8125D, 1.0D, 1.0D, 1.0D);
     protected static final AxisAlignedBB WEST_AABB = new AxisAlignedBB(0.8125D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
@@ -55,15 +59,12 @@ public class BlockLockedDoor extends Block implements IUnlockable, IColorType
 
 	public String type;
     
-    public BlockLockedDoor(Material materialIn, String type)
+    public BlockLockedDoor(Properties properties, String type)
     {
-        super(materialIn);
-        this.setCreativeTab(DungeonTools.dungeonTab);
-        this.setUnlocalizedName("door_" + type);
+        super(properties);
+        //this.setUnlocalizedName("door_" + type);
         this.setRegistryName("door_" + type);
-        this.setHardness(50.0F);
-        this.setResistance(2000.0F);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(OPEN, Boolean.valueOf(false)).withProperty(HINGE, BlockDoor.EnumHingePosition.LEFT).withProperty(POWERED, Boolean.valueOf(false)).withProperty(HALF, BlockDoor.EnumDoorHalf.LOWER));
+        this.setDefaultState(this.stateContainer.getBaseState().with(FACING, EnumFacing.NORTH).with(OPEN, Boolean.valueOf(false)).with(HINGE, DoorHingeSide.LEFT).with(POWERED, Boolean.valueOf(false)).with(HALF, DoubleBlockHalf.LOWER));
         this.type = type;
     }
     
@@ -202,7 +203,7 @@ public class BlockLockedDoor extends Block implements IUnlockable, IColorType
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
     {
-        if (state.getValue(HALF) == BlockDoor.EnumDoorHalf.UPPER)
+        if (state.getValue(HALF) == DoubleBlockHalf.UPPER)
         {
             BlockPos blockpos = pos.down();
             IBlockState iblockstate = worldIn.getBlockState(blockpos);
@@ -497,10 +498,6 @@ public class BlockLockedDoor extends Block implements IUnlockable, IColorType
     {
         return BlockFaceShape.UNDEFINED;
     }
-    
-    @Override
-    public Block setCreativeTab(CreativeTabs tab)
-    { return this; }
 
 	public Block getDoor()
 	{

@@ -1,5 +1,7 @@
 package com.theredmajora.dungeontools.client;
 
+import java.util.Random;
+
 import com.theredmajora.dungeontools.extra.EntityFallingPushBlock;
 
 import net.minecraft.block.state.IBlockState;
@@ -17,10 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public class RenderFallingPushBlock extends Render<EntityFallingPushBlock>
 {
     public RenderFallingPushBlock(RenderManager renderManagerIn)
@@ -55,10 +54,10 @@ public class RenderFallingPushBlock extends Render<EntityFallingPushBlock>
                 }
 
                 bufferbuilder.begin(7, DefaultVertexFormats.BLOCK);
-                BlockPos blockpos = new BlockPos(entity.posX, entity.getEntityBoundingBox().maxY, entity.posZ);
-                GlStateManager.translate((float)(x - (double)blockpos.getX() - 0.5D), (float)(y - (double)blockpos.getY()), (float)(z - (double)blockpos.getZ() - 0.5D));
-                BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
-                blockrendererdispatcher.getBlockModelRenderer().renderModel(world, blockrendererdispatcher.getModelForState(iblockstate), iblockstate, blockpos, bufferbuilder, false, MathHelper.getPositionRandom(entity.getOrigin()));
+                BlockPos blockpos = new BlockPos(entity.posX, entity.getBoundingBox().maxY, entity.posZ);
+                GlStateManager.translated((float)(x - (double)blockpos.getX() - 0.5D), (float)(y - (double)blockpos.getY()), (float)(z - (double)blockpos.getZ() - 0.5D));
+                BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
+                blockrendererdispatcher.getBlockModelRenderer().renderModel(world, blockrendererdispatcher.getModelForState(iblockstate), iblockstate, blockpos, bufferbuilder, false, new Random(), MathHelper.getPositionRandom(entity.getOrigin()));
                 tessellator.draw();
 
                 if (this.renderOutlines)

@@ -1,0 +1,13 @@
+modLoader="javafml"
+loaderVersion="[25,)"
+issueTrackerURL="https://github.com/TheRedMajora/DungeonTools/issues/new/choose"
+[[mods]]
+modId="dungeontools"
+version="${file.jarVersion}"
+displayName="DungeonTools"
+displayURL="https://minecraft.curseforge.com/projects/dungeontools"
+logoFile="assets/dungeontools/textures/logo.png"
+authors="TheRedMajora"
+description='''
+A mod that adds various blocks and items to help build dungeons in Adventure Maps.
+'''

@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import org.lwjgl.input.Mouse;
-
 import com.google.common.collect.Lists;
 import com.google.gson.JsonParseException;
 import com.theredmajora.dungeontools.DungeonTools;
@@ -28,10 +26,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public class GuiScreenNote extends GuiScreen
 {
     private static final ResourceLocation BOOK_GUI_TEXTURES = new ResourceLocation(DungeonTools.ID + ":textures/gui/note.png");
@@ -50,32 +45,25 @@ public class GuiScreenNote extends GuiScreen
     {
         this.book = book;
 
-        if (book.hasTagCompound())
+        if (book.hasTag())
         {
-            NBTTagCompound nbttagcompound = book.getTagCompound();
-            this.bookPages = nbttagcompound.getTagList("pages", 8).copy();
-            this.bookTotalPages = this.bookPages.tagCount();
+            NBTTagCompound nbttagcompound = book.getTag();
+            this.bookPages = nbttagcompound.getList("pages", 8).copy();
+            this.bookTotalPages = this.bookPages.size();
 
             if (this.bookTotalPages < 1)
             {
-                this.bookPages.appendTag(new NBTTagString("")); // Forge: fix MC-1685
+                this.bookPages.add(new NBTTagString("")); // Forge: fix MC-1685
                 this.bookTotalPages = 1;
             }
         }
     }
 
-    public void updateScreen()
-    {
-        super.updateScreen();
-    }
-
     public void initGui()
     {
-    	Mouse.setGrabbed(false);
-    	
-        this.buttonList.clear();
+        this.buttons.clear();
 
-        this.addButton(new GuiButton(0, this.width / 2 - 100, 196, 200, 20, I18n.format("gui.done")));
+        //this.addButton(new GuiButton(0, this.width / 2 - 100, 196, 200, 20, I18n.format("gui.done")));
 
         int i = (this.width - 192) / 2;
         this.buttonNextPage = (GuiScreenNote.NextPageButton) this.addButton(new GuiScreenNote.NextPageButton(1, i + 120, 156, true));
@@ -121,7 +109,7 @@ public class GuiScreenNote extends GuiScreen
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(BOOK_GUI_TEXTURES);
         int i = (this.width - 192) / 2;
         this.drawTexturedModalRect(i, 2, 0, 0, 192, 192);
@@ -129,18 +117,18 @@ public class GuiScreenNote extends GuiScreen
         String s4 = I18n.format("book.pageIndicator", this.currPage + 1, this.bookTotalPages);
         String s5 = "";
 
-        if (this.bookPages != null && this.currPage >= 0 && this.currPage < this.bookPages.tagCount())
+        if (this.bookPages != null && this.currPage >= 0 && this.currPage < this.bookPages.size())
         {
-            s5 = this.bookPages.getStringTagAt(this.currPage);
+            s5 = this.bookPages.getString(this.currPage);
         }
 
         if (this.cachedPage != this.currPage)
         {
-            if (ItemWrittenBook.validBookTagContents(this.book.getTagCompound()))
+            if (ItemWrittenBook.validBookTagContents(this.book.getTag()))
             {
                 try
                 {
-                    ITextComponent itextcomponent = ITextComponent.Serializer.jsonToComponent(s5);
+                    ITextComponent itextcomponent = ITextComponent.Serializer.fromJson(s5);
                     this.cachedComponents = itextcomponent != null ? GuiUtilRenderComponents.splitText(itextcomponent, 116, this.fontRenderer, true, true) : null;
                 }
                 catch (JsonParseException var13)
@@ -171,7 +159,7 @@ public class GuiScreenNote extends GuiScreen
             for (int l1 = 0; l1 < k1; ++l1)
             {
                 ITextComponent itextcomponent2 = this.cachedComponents.get(l1);
-                this.fontRenderer.drawString(itextcomponent2.getUnformattedText(), i + 36, 34 + l1 * this.fontRenderer.FONT_HEIGHT, 0);
+                this.fontRenderer.drawString(itextcomponent2.getUnformattedComponentText(), i + 36, 34 + l1 * this.fontRenderer.FONT_HEIGHT, 0);
             }
 
             ITextComponent itextcomponent1 = this.getClickedComponentAt(mouseX, mouseY);
@@ -182,7 +170,7 @@ public class GuiScreenNote extends GuiScreen
             }
         }
 
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        //super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     /**
@@ -302,7 +290,6 @@ public class GuiScreenNote extends GuiScreen
         }
     }
 
-    @SideOnly(Side.CLIENT)
     static class NextPageButton extends GuiButton
         {
             private final boolean isForward;
@@ -321,7 +308,7 @@ public class GuiScreenNote extends GuiScreen
                 if (this.visible)
                 {
                     boolean flag = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-                    GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                    GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
                     mc.getTextureManager().bindTexture(GuiScreenNote.BOOK_GUI_TEXTURES);
                     int i = 0;
                     int j = 192;
