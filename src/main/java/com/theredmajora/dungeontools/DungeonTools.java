@@ -2,10 +2,6 @@ package com.theredmajora.dungeontools;
 
 import java.lang.reflect.Field;
 
-import com.theredmajora.dungeontools.blocks.BlockChains;
-import com.theredmajora.dungeontools.blocks.BlockLock;
-import com.theredmajora.dungeontools.blocks.BlockLockedDoor;
-import com.theredmajora.dungeontools.client.ClientProxy;
 import com.theredmajora.dungeontools.extra.EntityFallingPushBlock;
 import com.theredmajora.dungeontools.extra.RecipeLantern;
 import com.theredmajora.dungeontools.tileentity.TileEntityGroundItem;
@@ -13,7 +9,6 @@ import com.theredmajora.dungeontools.tileentity.TileEntityPushBlock;
 import com.theredmajora.dungeontools.tileentity.TileEntityVanish;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -21,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -53,8 +47,8 @@ public class DungeonTools
 		}
 	};
 
-    @SidedProxy(clientSide="com.theredmajora.dungeontools.client.ClientProxy")
-    public static ClientProxy proxy;
+    @SidedProxy(clientSide="com.theredmajora.dungeontools.client.ClientProxy", serverSide="com.theredmajora.dungeontools.ServerProxy")
+    public static ServerProxy proxy;
 	
     @EventHandler
     public void init(FMLInitializationEvent event)
@@ -120,9 +114,6 @@ public class DungeonTools
     					{
     						event.getRegistry().register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
     						DungeonTools.proxy.registerItemRenderer(Item.getItemFromBlock(block), 0);
-    						if(block instanceof BlockChains) ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(BlockChains.VANISH).build());
-    						if(block instanceof BlockLock) ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(BlockLock.VANISH).build());
-    						if(block instanceof BlockLockedDoor) ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(BlockLockedDoor.POWERED).build());
     					}
     				}
     				
